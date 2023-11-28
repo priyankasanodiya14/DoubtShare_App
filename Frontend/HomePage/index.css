@@ -1,0 +1,161 @@
+/* styles.css */
+
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+}
+
+.container {
+    width: 80%;
+    margin: 0 auto;
+}
+
+/* Navbar Styles */
+.navbar {
+    background-color: #333;
+    padding: 10px 0;
+}
+
+.logo {
+    color: white;
+    text-decoration: none;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.nav-links {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+
+.nav-link {
+    color: white;
+    text-decoration: none;
+    padding: 10px;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+.nav-link:hover {
+    background-color: #555;
+}
+
+/* Main Content Styles */
+.main-content {
+    background-color: #f4f4f4;
+    padding: 40px 0;
+}
+
+.hero-section {
+    text-align: center;
+    
+}
+
+.infoDb {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    text-align: center;
+  }
+  
+  .infoDb h1 {
+    color: #3498db;
+    font-size: 2em;
+    margin-bottom: 10px;
+  }
+  
+  .infoDb p {
+    font-size: 1em;
+    color: #555;
+    line-height: 1.0;
+  }
+  
+/* Features */
+.features {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    height: 250px;
+  }
+  
+  .features img {
+    width: 220px;
+    height: auto; 
+    border-radius: 8px; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out; 
+  }
+  
+  .features img:hover {
+    transform: scale(1.1); 
+  }
+  
+
+.image-slider {
+    overflow: hidden;
+}
+
+#chatbot{
+    text-decoration: none;
+    color: white;
+}
+.image-slider img {
+    max-width: 30%;
+    height: 10%;
+    border-radius: 8px;
+    margin-right: 10px; 
+    animation: slide 5s infinite;
+}
+
+
+@keyframes slide {
+    0%, 100% {
+        opacity: 0;
+    }
+    25%, 75% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0;
+    }
+}
+
+/* Footer Styles */
+.footer {
+    background-color: #333;
+    color: white;
+    padding: 20px 0;
+    text-align: center;
+}
+
+.contact-info, .address {
+    margin-bottom: 20px;
+}
+
+/* Responsive Styling */
+@media screen and (max-width: 600px) {
+    .container {
+        width: 90%;
+    }
+
+    .navbar {
+        padding: 10px;
+    }
+
+    .nav-links {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .nav-link {
+        margin-bottom: 10px;
+    }
+
+    .image-slider img {
+        animation: none;
+    }
+
+}

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+      }
+
+      .dashboard {
+        max-width: 400px;
+        margin: 0 auto;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 8px;
+      }
+
+      input,
+      button {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 15px;
+        box-sizing: border-box;
+      }
+
+      button {
+        background-color: #333;
+        color: white;
+        border: none;
+        cursor: pointer;
+      }
+
+      button:hover {
+        background-color: #333;
+      }
+
+      .navbar {
+        background-color: #333;
+        padding: 10px 0;
+      }
+
+      .logo {
+        color: white;
+        text-decoration: none;
+        font-size: 24px;
+        font-weight: bold;
+      }
+
+      .nav-links {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .nav-link {
+        color: white;
+        text-decoration: none;
+        padding: 10px;
+        border-radius: 4px;
+        transition: background-color 0.3s;
+      }
+
+      .nav-link:hover {
+        background-color: #555;
+      }
+
+      .container {
+        width: 80%;
+        margin: 0 auto;
+      }
+
+      .button:hover {
+        background-color: #555;
+      }
+    </style>
+    <title>Tutor Dashboard</title>
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="container">
+        <a href="#" class="logo">DoubtShare</a>
+        <div class="nav-links">
+          <a href="../index.html" class="nav-link">Home</a>
+          <a href="../login/login.html" id="loginNav" class="nav-link">Login</a>
+          <a href="../login/register.html" id="registerNav" class="nav-link"
+            >Register</a
+          >
+          <a href="#" class="nav-link">Contact</a>
+        </div>
+      </div>
+    </nav>
+
+    <div class="dashboard">
+      <h2>Tutor Solve Doubt</h2>
+      <form id="solveDoubtForm">
+        <label for="doubtId">Doubt ID:</label>
+        <input type="text" id="doubtId" name="doubtId" required />
+
+        <button type="button" class="button" onclick="solveDoubt()">
+          Solve Doubt
+        </button>
+      </form>
+    </div>
+    <div class="dashboard">
+      <h2>Open Doubts</h2>
+      <button class="button" onclick="getOpenDoubts()">Get Open Doubts</button>
+
+      <div id="doubtsList"></div>
+    </div>
+
+    <script>
+      async function solveDoubt() {
+        var doubtId = document.getElementById("doubtId").value;
+        var token = localStorage.getItem("jwtToken");
+
+        var data = {
+          doubtId: doubtId,
+        };
+
+        try {
+          var response = await fetch(
+            `http://localhost:8080/tutors/tutor-solve-doubt/${doubtId}/`,
+            {
+              method: "POST",
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+              body: JSON.stringify(data),
+            }
+          );
+
+          if (response.ok) {
+            console.log("Doubt solved successfully");
+          } else {
+            console.error("Failed to solve doubt");
+          }
+        } catch (error) {
+          console.error("Error:", error);
+        }
+
+        console.log(token);
+        document.getElementById("solveDoubtForm").reset();
+      }
+
+      async function getOpenDoubts() {
+        var token = localStorage.getItem("jwtToken");
+        try {
+          var response = await fetch(
+            "http://localhost:8080/tutors/open-doubts",
+            {
+              method: "GET",
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+
+          if (response.ok) {
+            var data = await response.json();
+            displayDoubtsList(data);
+          } else {
+            console.error("Failed to get open doubts");
+          }
+        } catch (error) {
+          console.error("Error:", error);
+        }
+      }
+
+      function displayDoubtsList(data) {
+        var doubtsListDiv = document.getElementById("doubtsList");
+        doubtsListDiv.innerHTML = "<h3>Open Doubts:</h3>";
+
+        data.forEach((doubt) => {
+          doubtsListDiv.innerHTML += `<p>Doubt ID: ${doubt.doubtId}, Student ID: ${doubt.student.myUserId}, Subject: ${doubt.doubtSubject}, Doubt Created At : ${doubt.createdAt}, Doubt Status : ${doubt.doubtStatus}</p>`;
+        });
+
+        if (data.length === 0) {
+          doubtsListDiv.innerHTML += "<p>No open doubts available.</p>";
+        }
+      }
+    </script>
+  </body>
+</html>

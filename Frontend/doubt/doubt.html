@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="doubt.css" />
+    <title>Doubt Management System</title>
+  </head>
+  <body>
+    <div class="container">
+      <button onclick="getAllDoubts()">Get All Doubts</button>
+      <label for="doubtIdInput">Doubt ID:</label>
+      <input type="text" id="doubtIdInput" />
+      <button onclick="getDoubtById()">Get Doubt by ID</button>
+      <label for="subjectInput">Subject:</label>
+      <select id="subjectInput">
+        <option value="MATH">MATH</option>
+        <option value="SCIENCE">SCIENCE</option>
+        <option value="HISTORY">HISTORY</option>
+      </select>
+      <button onclick="getDoubtsBySubject()">Get Doubts by Subject</button>
+
+      <div id="result"></div>
+    </div>
+
+    <script src="doubt.js"></script>
+  </body>
+</html>

@@ -1,0 +1,99 @@
+<!-- index.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DoubtShare - Home</title>
+    <link rel="stylesheet" href="./HomePage/index.css" />
+  </head>
+  <body>
+    <!-- Navbar -->
+    <nav class="navbar">
+      <div class="container">
+        <a href="#" class="logo">DoubtShare</a>
+        <div class="nav-links">
+          <a href="./index.html" class="nav-link">Home</a>
+          <a href="./login/login.html" id="loginNav" class="nav-link">Login</a>
+          <a href="./login/register.html" id="registerNav" class="nav-link"
+            >Register</a
+          >
+         
+          <a href="#" class="nav-link">Contact</a>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <div class="container">
+        <div class="hero-section">
+          <h1>Welcome to DoubtShare</h1>
+          <p>Ask doubts anytime, anywhere!</p>
+        </div>
+
+        <!-- Image Slider -->
+
+        <div class="image-slider">
+          <!-- Add your slider images here -->
+          <img src="./HomePage/images/image1.jpg" alt="Image 1" />
+          <img src="./HomePage/images/image2.jpg" alt="Image 2" />
+          <img src="./HomePage/images/image3.jpg" alt="Image 3" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Features -->
+    <div class="infoDb">
+      <h1>Expertise in Subjects</h1>
+      <p>
+        Navigate the realm of education with confidence on our Doubt Share
+        Platform. This collaborative space empowers learners to ask questions,
+        share uncertainties, and connect with a community of experts. Dive into
+        subjects like biology, chemistry, English, math, and physics, fostering
+        a supportive environment for knowledge exchange. Explore the features
+        that make learning a shared journey, where curiosity is celebrated, and
+        understanding is a collective endeavor.
+      </p>
+    </div>
+    <div class="features">
+      <img src="./HomePage/images/biology.svg" alt="img1" />
+      <img src="./HomePage/images/chemistry.svg" alt="img2" />
+      <img src="./HomePage/images/english.svg" alt="img3" />
+      <img src="./HomePage/images/maths.svg" alt="img4" />
+      <img src="./HomePage/images/physics.svg" alt="img5" />
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="container">
+        <div class="contact-info">
+          <h3>Contact Us</h3>
+          <p>Email: sanodiyapriyanka68@gmail.com</p>
+          <p>Phone: 7498925961</p>
+        </div>
+        <div class="address">
+          <h3>Address</h3>
+          <p>Nagpur, Maharashtra, India</p>
+        </div>
+      </div>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+
+  <script>
+    const register = document.getElementById("registerNav");
+
+    register.addEventListener("click", () => {
+      window.location.href = "../login/register.html";
+    });
+
+    const login = document.getElementById("loginNav");
+
+    login.addEventListener("click", () => {
+      window.location.href = "../login/login.html";
+    });
+  </script>
+</html>

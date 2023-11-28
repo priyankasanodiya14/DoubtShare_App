@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="./register.css" />
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="container">
+        <a href="#" class="logo">DoubtShare</a>
+        <div class="nav-links">
+          <a href="../index.html" class="nav-link">Home</a>
+          <a href="./login.html" id="loginNav" class="nav-link">Login</a>
+          <a href="./register.html" id="registerNav" class="nav-link"
+            >Register</a
+          >
+          <a href="#" class="nav-link">Contact</a>
+        </div>
+      </div>
+    </nav>
+    <div class="formDiv">
+      <form action="" id="tutorForm">
+        <h1>Register as Tutor</h1>
+        <div>
+          <label for="">Enter Name</label>
+          <br />
+          <input type="text" placeholder="Name" name="" id="nameT" />
+        </div>
+        <div>
+          <label for="">Enter Class Grade</label>
+          <br />
+          <input type="text" placeholder="Class Grade" name="" id="gradeT" />
+        </div>
+        <div>
+          <label for="">Enter Language</label>
+          <br />
+          <input type="text" placeholder="Language" name="" id="langT" />
+        </div>
+        <div>
+          <label for="">Enter Email</label>
+          <br />
+          <input type="email" placeholder="Email" name="" id="emailT" />
+        </div>
+        <div>
+          <label for="">Enter Password</label>
+          <br />
+          <input
+            type="password"
+            placeholder="password"
+            name=""
+            id="passwordT"
+          />
+        </div>
+        <div>
+          <label for="">Enter Tutor Expertise</label>
+          <br />
+          <input type="text" placeholder="Tutor Expertise" name="" id="expT" />
+        </div>
+        <div>
+          <button type="button" class="buttonLogin" onclick="registerTutor()">
+            Register Tutor
+          </button>
+        </div>
+      </form>
+      <form action="" id="studentForm">
+        <h1>Register as Student</h1>
+        <div>
+          <label for="">Enter Name</label>
+          <br />
+          <input type="text" placeholder="Name" name="" id="nameS" />
+        </div>
+        <div>
+          <label for="">Enter Class Grade</label>
+          <br />
+          <input type="text" placeholder="Class Grade" name="" id="gradeS" />
+        </div>
+        <div>
+          <label for="">Enter Language</label>
+          <br />
+          <input type="text" placeholder="Language" name="" id="langS" />
+        </div>
+        <div>
+          <label for="">Enter Email</label>
+          <br />
+          <input type="email" placeholder="Email" name="" id="emailS" />
+        </div>
+        <div>
+          <label for="">Enter Password</label>
+          <br />
+          <input
+            type="password"
+            placeholder="password"
+            name=""
+            id="passwordS"
+          />
+        </div>
+        <div>
+          <button type="button" class="buttonLogin" onclick="registerStudent()">
+            Register Student
+          </button>
+        </div>
+      </form>
+    </div>
+    <div class="bottom-banner">
+      <img
+        src="https://static.vecteezy.com/system/resources/thumbnails/002/294/874/small_2x/e-learning-web-banner-design-students-take-online-tests-during-online-classes-online-education-digital-classroom-e-learning-concept-header-or-footer-banner-free-vector.jpg"
+        alt="Banner Image"
+      />
+    </div>
+  </body>
+  <script>
+    async function registerTutor() {
+      let name = document.getElementById("nameT").value;
+      let classGrade = document.getElementById("gradeT").value;
+      let language = document.getElementById("langT").value;
+      let email = document.getElementById("emailT").value;
+      let password = document.getElementById("passwordT").value;
+      let tutorExpertise = document.getElementById("expT").value;
+
+      try {
+        const response = await fetch(
+          "http://localhost:8080/tutors/registerTutor",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              name,
+              classGrade,
+              language,
+              email,
+              password,
+              tutorExpertise,
+            }),
+          }
+        );
+
+        const data = await response.json();
+        console.log(data);
+        alert("Tutor Registered");
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    async function registerStudent() {
+      let name = document.getElementById("nameS").value;
+      let classGrade = document.getElementById("gradeS").value;
+      let language = document.getElementById("langS").value;
+      let email = document.getElementById("emailS").value;
+      let password = document.getElementById("passwordS").value;
+
+      try {
+        const response = await fetch(
+          "http://localhost:8080/students/registerStudent",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              name,
+              classGrade,
+              language,
+              email,
+              password,
+            }),
+          }
+        );
+
+        const data = await response.json();
+        console.log(data);
+        alert("Student Registered");
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  </script>
+</html>

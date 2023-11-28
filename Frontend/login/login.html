@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .formDiv {
+        height: 85vh;
+        width: 100%;
+        display: flex;
+        justify-content: space-around;
+        gap: 20px;
+      }
+
+      .container {
+        width: 80%;
+        margin: 0 auto;
+      }
+
+      #tutorLogin {
+        box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+        display: flex;
+        flex-direction: column;
+        width: 40%;
+        padding: 5%;
+        gap: 15px;
+        justify-content: center;
+        align-items: center;
+      }
+
+      #studentLogin {
+        box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+        width: 40%;
+        padding: 5%;
+        display: flex;
+        gap: 15px;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .navbar {
+        background-color: #333;
+        padding: 10px 0;
+      }
+
+      .logo {
+        color: white;
+        text-decoration: none;
+        font-size: 24px;
+        font-weight: bold;
+      }
+
+      .nav-links {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .nav-link {
+        color: white;
+        text-decoration: none;
+        padding: 10px;
+        border-radius: 4px;
+        transition: background-color 0.3s;
+      }
+
+      .nav-link:hover {
+        background-color: #555;
+      }
+
+      .buttonLogin {
+        background-color: #333;
+        padding: 5px;
+        color: aliceblue;
+        cursor: pointer;
+      }
+
+      .buttonLogin:hover {
+        background-color: #555;
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="container">
+        <a href="#" class="logo">DoubtShare</a>
+        <div class="nav-links">
+          <a href="../index.html" class="nav-link">Home</a>
+          <a href="./login.html" id="loginNav" class="nav-link">Login</a>
+          <a href="./register.html" id="registerNav" class="nav-link"
+            >Register</a
+          >
+          <a href="#" class="nav-link">Contact</a>
+        </div>
+      </div>
+    </nav>
+    <div class="formDiv">
+      <form action="" id="tutorLogin">
+        <h1>Login as Tutor</h1>
+        <div>
+          <label for="">Enter Username</label>
+          <br />
+          <input type="text" placeholder="Username" name="" id="usernameT" />
+        </div>
+        <div>
+          <label for="">Enter Password</label>
+          <br />
+          <input
+            type="password"
+            placeholder="Password"
+            name=""
+            id="passwordT"
+          />
+        </div>
+        <div>
+          <button type="button" class="buttonLogin" onClick="loginTutor()">
+            Login Tutor
+          </button>
+        </div>
+      </form>
+      <form action="" id="studentLogin">
+        <h1>Login as Student</h1>
+        <div>
+          <label for="">Enter Username</label>
+          <br />
+          <input type="text" name="" id="usernameS" placeholder="Username" />
+        </div>
+        <div>
+          <label for=""> Enter Password </label>
+          <br />
+          <input
+            type="password"
+            name=""
+            id="passwordS"
+            placeholder="Password"
+          />
+        </div>
+        <div>
+          <button type="button" class="buttonLogin" onClick="loginStudent()">
+            Login Student
+          </button>
+        </div>
+      </form>
+    </div>
+  </body>
+
+  <script>
+    //  Tutor login
+
+    function loginTutor() {
+      const username = document.getElementById("usernameT").value;
+      const password = document.getElementById("passwordT").value;
+
+      let url = "http://localhost:8080/tutors/signin";
+
+      const login = btoa(username + ":" + password);
+      console.log(login);
+      fetch(url, {
+        method: "POST",
+        headers: {
+          // 'Content-Type': 'application/json',
+          Authorization: "Basic " + login,
+        },
+      })
+        .then((response) => {
+          console.log("kjhvjgjsdhkh");
+          if (response.status === 401) {
+            throw new Error("Login failed");
+          } else if (!response.ok) {
+            throw new Error("An error occurred during Login");
+          }
+          // return response.json();
+          const token = response.headers.get("Authorization");
+          console.log(token);
+          localStorage.setItem("jwtToken", token);
+          window.location.href = "../tutor/tutor.html";
+        })
+
+        .catch((error) => {
+          console.error("Error:" + error);
+          alert(error.message);
+        });
+    }
+
+    function loginStudent() {
+      const username = document.getElementById("usernameS").value;
+      const password = document.getElementById("passwordS").value;
+
+      let url = "http://localhost:8080/students/signin";
+
+      const login = btoa(username + ":" + password);
+      console.log(login);
+      fetch(url, {
+        method: "POST",
+        headers: {
+          // 'Content-Type': 'application/json',
+          Authorization: "Basic " + login,
+        },
+      })
+        .then((response) => {
+          console.log("kjhvjgjsdhkh");
+          if (response.status === 401) {
+            throw new Error("Login failed");
+          } else if (!response.ok) {
+            // Handle other error responses here
+
+            throw new Error("An error occurred during Login");
+          }
+          // return response.json();
+          const token = response.headers.get("Authorization");
+          console.log(token);
+          localStorage.setItem("jwtToken", token);
+          window.location.href = "../Student/dashboard.html";
+        })
+
+        .catch((error) => {
+          console.error("Error:" + error);
+          alert(error.message);
+        });
+    }
+  </script>
+</html>

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chatbot</title>
+    <style>
+      body {
+        font-family: "Arial", sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+      }
+
+      #chat-container {
+        max-width: 800px;
+        margin: 20px auto;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        overflow: hidden;
+      }
+
+      #chat-messages {
+        padding: 10px;
+        height: 300px;
+        overflow-y: auto;
+        background-color: #fff;
+      }
+
+      #user-input {
+        display: flex;
+        padding: 10px;
+        background-color: #eee;
+      }
+
+      #user-message {
+        flex: 1;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 8px;
+      }
+
+      #send-button {
+        margin-left: 10px;
+        padding: 8px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        background-color: #222422;
+        color: #fff;
+      }
+      /* nav */
+
+      .navbar {
+        background-color: #333;
+        padding: 10px 0;
+      }
+
+      .logo {
+        color: white;
+        text-decoration: none;
+        font-size: 24px;
+        font-weight: bold;
+      }
+
+      .nav-links {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .nav-link {
+        color: white;
+        text-decoration: none;
+        padding: 10px;
+        border-radius: 4px;
+        transition: background-color 0.3s;
+      }
+
+      .nav-link:hover {
+        background-color: #555;
+      }
+      .container {
+        width: 80%;
+        margin: 0 auto;
+      }
+      #chatbot {
+        color: white;
+        text-decoration: none;
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="container">
+        <a href="#" class="logo">DoubtShare</a>
+        <div class="nav-links">
+          <a href="../index.html" class="nav-link">Home</a>
+          <a href="../login/login.html" id="loginNav" class="nav-link">Login</a>
+          <a href="../login/login.html" id="registerNav" class="nav-link"
+            >Register</a
+          >
+          <a href="./chatbot.html" id="chatbot">Chat</a>
+          <a href="#" class="nav-link">Contact</a>
+        </div>
+      </div>
+    </nav>
+    <div id="chat-container">
+      <div id="chat-messages"></div>
+      <div id="user-input">
+        <input type="text" id="user-message" placeholder="Type a message..." />
+        <button id="send-button" onclick="sendMessage()">Send</button>
+      </div>
+    </div>
+
+    <script>
+      const chatMessages = document.getElementById("chat-messages");
+      const userMessageInput = document.getElementById("user-message");
+
+      function appendMessage(sender, message) {
+        const messageElement = document.createElement("div");
+        messageElement.innerHTML = `<strong>${sender}:</strong> ${message}`;
+        chatMessages.appendChild(messageElement);
+        chatMessages.scrollTop = chatMessages.scrollHeight; // Scroll to the bottom
+      }
+
+      function sendMessage() {
+        var token = localStorage.getItem("jwtToken");
+        const userMessage = userMessageInput.value.trim();
+        if (userMessage !== "") {
+          appendMessage("You", userMessage);
+          userMessageInput.value = "";
+
+          // Include the prompt as a query parameter in the URL
+          const prompt = encodeURIComponent(userMessage);
+          const url = `http://localhost:8080/students/chat?prompt=${prompt}`;
+
+          fetch(url, {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              const choices = data.choices;
+              if (choices && choices.length > 0) {
+                const botMessage = choices[0].message.content;
+                appendMessage("Bot", botMessage);
+              } else {
+                console.error("No valid choices received from the server.");
+              }
+            })
+            .catch((error) => {
+              console.error("Error sending message:", error);
+            });
+
+          console.log(token);
+        }
+      }
+    </script>
+  </body>
+</html>

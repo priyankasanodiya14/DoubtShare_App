@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+      }
+
+      .dashboard {
+        max-width: 100%;
+        margin: 0 auto;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 8px;
+      }
+
+      input,
+      select,
+      button {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 15px;
+        box-sizing: border-box;
+      }
+
+      button {
+        background-color: #333;
+        color: white;
+        border: none;
+        cursor: pointer;
+      }
+
+      button:hover {
+        background-color: #555;
+      }
+
+      /* nav */
+
+      .navbar {
+        background-color: #333;
+        padding: 10px 0;
+      }
+
+      .logo {
+        color: white;
+        text-decoration: none;
+        font-size: 24px;
+        font-weight: bold;
+      }
+
+      .nav-links {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .nav-link {
+        color: white;
+        text-decoration: none;
+        padding: 10px;
+        border-radius: 4px;
+        transition: background-color 0.3s;
+      }
+
+      .nav-link:hover {
+        background-color: #555;
+      }
+      .container {
+        width: 80%;
+        margin: 0 auto;
+      }
+      #chatbot {
+        color: white;
+        text-decoration: none;
+      }
+    </style>
+    <title>Student Dashboard</title>
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="container">
+        <a href="#" class="logo">DoubtShare</a>
+        <div class="nav-links">
+          <a href="../index.html" class="nav-link">Home</a>
+          <a href="../login/login.html" id="loginNav" class="nav-link">Login</a>
+          <a href="../login/login.html" id="registerNav" class="nav-link"
+            >Register</a
+          >
+          <a href="./chatbot.html" id="chatbot">Chat</a>
+          <a href="#" class="nav-link">Contact</a>
+        </div>
+      </div>
+    </nav>
+    <div class="dashboard">
+      <h2>Create a Doubt</h2>
+      <form id="doubtForm">
+        <label for="tutorId">Tutor ID:</label>
+        <input type="text" id="tutorId" name="tutorId" required />
+
+        <label for="doubtSubject">Doubt Subject:</label>
+        <select id="doubtSubject" name="doubtSubject" required>
+          <option value="MATH">MATH</option>
+          <option value="SCIENCE">SCIENCE</option>
+          <option value="HISTORY">HISTORY</option>
+          <!-- Add more subjects as needed -->
+        </select>
+
+        <button class="hoverButton" type="button" onclick="createDoubt()">
+          Create Doubt
+        </button>
+      </form>
+    </div>
+    <!-- find tutor by expertise -->
+    <div class="tutorExpert">
+      <h2>Find Tutor by Expertise</h2>
+      <form id="expertiseForm">
+        <label for="expertise">Select Expertise:</label>
+        <select id="expertise" name="expertise" required>
+          <option value="MATH">MATH</option>
+          <option value="SCIENCE">SCIENCE</option>
+          <option value="HISTORY">HISTORY</option>
+          <!-- Add more expertise options as needed -->
+        </select>
+
+        <button class="hoverButton" type="button" onclick="findTutor()">
+          Find Tutor
+        </button>
+      </form>
+
+      <div id="result"></div>
+    </div>
+
+    <div class="online">
+      <h2>Find Available Tutors</h2>
+      <button class="hoverButton" onclick="checkAvailability()">
+        Check Availability
+      </button>
+
+      <div id="availabilityResult"></div>
+    </div>
+    <script>
+      function getAuthorizationHeader() {
+        var token = localStorage.getItem("jwtToken");
+        return {
+          Authorization: `Bearer ${token}`,
+        };
+      }
+
+      async function createDoubt() {
+        try {
+          var token = localStorage.getItem("jwtToken");
+          var tutorId = document.getElementById("tutorId").value;
+          var doubtSubject = document.getElementById("doubtSubject").value;
+          var data = {
+            tutorId: tutorId,
+            doubtSubject: doubtSubject,
+          };
+
+          var response = await fetch(
+            "http://localhost:8080/students/createDoubt",
+            {
+              method: "POST",
+              headers: getAuthorizationHeader(),
+              body: JSON.stringify(data),
+            }
+          );
+
+          if (response.ok) {
+            console.log("Doubt created successfully");
+          } else {
+            console.error("Failed to create doubt");
+          }
+        } catch (error) {
+          console.error("Error:", error);
+        }
+
+        document.getElementById("doubtForm").reset();
+      }
+
+      async function findTutor() {
+        var token = localStorage.getItem("jwtToken");
+        var expertise = document.getElementById("expertise").value;
+
+        try {
+          var response = await fetch(
+            `http://localhost:8080/students/find-tutor-by-expertise/${expertise}`,
+            {
+              method: "GET",
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+
+          if (response.ok) {
+            var data = await response.json();
+            displayResult(data);
+          } else {
+            console.error("Failed to find tutor. Status:", response.status);
+            console.error("Response Text:", await response.text());
+          }
+        } catch (error) {
+          console.error("Error:", error);
+        }
+      }
+
+      function displayResult(data) {
+        var resultDiv = document.getElementById("result");
+        resultDiv.innerHTML = "<h3>Results:</h3>";
+
+        data.forEach((tutor) => {
+          resultDiv.innerHTML += `<p>Tutor ID: ${tutor.myUserId}, Name: ${tutor.name}, Language : ${tutor.language}</p>`;
+        });
+      }
+
+      async function checkAvailability() {
+        try {
+          var token = localStorage.getItem("jwtToken");
+          var response = await fetch(
+            "http://localhost:8080/students/find-available-tutor",
+            {
+              headers: getAuthorizationHeader(),
+            }
+          );
+
+          if (response.ok) {
+            var data = await response.json();
+            displayAvailabilityResult(data);
+          } else {
+            console.error("Failed to find available tutors");
+          }
+        } catch (error) {
+          console.error("Error:", error);
+        }
+      }
+
+      function displayAvailabilityResult(data) {
+        var availabilityResultDiv =
+          document.getElementById("availabilityResult");
+        availabilityResultDiv.innerHTML = "<h3>Available Tutors:</h3>";
+
+        data.forEach((tutor) => {
+          if (tutor.availabilityStatus === "online") {
+            availabilityResultDiv.innerHTML += `<p>Tutor ID: ${tutor.id}, Name: ${tutor.myUser.name}</p>`;
+          }
+        });
+
+        if (availabilityResultDiv.innerHTML === "<h3>Available Tutors:</h3>") {
+          availabilityResultDiv.innerHTML +=
+            "<p>No online tutors available.</p>";
+        }
+      }
+    </script>
+  </body>
+</html>
